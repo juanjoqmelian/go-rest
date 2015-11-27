@@ -1,4 +1,4 @@
-FROM google/golang:latest
+FROM golang:latest
 MAINTAINER Juan Quintana <juan.quintana@luxuriem.com>
 ADD . /go/src/github.com/juanjoqmelian/go-rest/users
 RUN go get github.com/julienschmidt/httprouter

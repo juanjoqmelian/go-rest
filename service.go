@@ -15,6 +15,5 @@ func main() {
 	router.POST("/users", resources.NewUser)
 	router.PUT("/users/:email", resources.NewUser)
 
-
 	http.ListenAndServe(":8080", router)
 }
