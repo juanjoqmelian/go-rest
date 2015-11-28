@@ -4,9 +4,16 @@ import (
 	"net/http"
 	"github.com/julienschmidt/httprouter"
 	"github.com/juanjoqmelian/go-rest/users/resources"
+	"github.com/juanjoqmelian/go-rest/users/mongo"
+)
+
+const (
+	MongoDbHost = "mongodb://192.168.99.100:27017"
 )
 
 func main() {
+
+	mongo.GetConnection()
 
 	router := httprouter.New();
 

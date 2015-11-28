@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"github.com/julienschmidt/httprouter"
 	"github.com/juanjoqmelian/go-rest/users/entities"
-	"gopkg.in/mgo.v2"
+	"github.com/juanjoqmelian/go-rest/users/mongo"
 	"io/ioutil"
 	"encoding/json"
 	"gopkg.in/mgo.v2/bson"
@@ -31,16 +31,10 @@ func (DefaultUserWebService) NewUser(writer http.ResponseWriter, request *http.R
 
 	user := assembleUserFromRequest(request)
 
-	session, err := mgo.Dial(MongoDbHost)
-	if err != nil {
-		log.Fatal("mongo connection not found! ", err)
-	}
-	defer session.Close()
+	mongoConnection := mongo.GetConnection()
 
-	session.SetMode(mgo.Monotonic, true)
-
-	collection := session.DB(MongoDbSchema).C(MongoDbUserTable)
-	err = collection.Insert(user)
+	collection := mongoConnection.Session().DB(MongoDbSchema).C(MongoDbUserTable)
+	err := collection.Insert(user)
 	if err != nil {
 		log.Fatal("couldn't insert users into mongo! ", err)
 	}
@@ -53,18 +47,12 @@ func (DefaultUserWebService) NewUser(writer http.ResponseWriter, request *http.R
 
 func (DefaultUserWebService) GetUsers(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 
-	session, err := mgo.Dial(MongoDbHost)
-	if err != nil {
-		log.Fatal("mongo connection not found! ", err)
-	}
-	defer session.Close()
+	mongoConnection := mongo.GetConnection()
 
-	session.SetMode(mgo.Monotonic, true)
-
-	collection := session.DB(MongoDbSchema).C(MongoDbUserTable)
+	collection := mongoConnection.Session().DB(MongoDbSchema).C(MongoDbUserTable)
 
 	result := []entities.User{}
-	err = collection.Find(bson.M{}).All(&result)
+	err := collection.Find(bson.M{}).All(&result)
 	if err != nil {
 		log.Fatal("couldn't find user in mongo! ", err)
 	}
@@ -81,18 +69,12 @@ func (DefaultUserWebService) GetUser(writer http.ResponseWriter, request *http.R
 
 	email := params.ByName("email")
 
-	session, err := mgo.Dial(MongoDbHost)
-	if err != nil {
-		log.Fatal("mongo connection not found! ", err)
-	}
-	defer session.Close()
+	mongoConnection := mongo.GetConnection()
 
-	session.SetMode(mgo.Monotonic, true)
-
-	collection := session.DB(MongoDbSchema).C(MongoDbUserTable)
+	collection := mongoConnection.Session().DB(MongoDbSchema).C(MongoDbUserTable)
 
 	result := entities.User{}
-	err = collection.Find(bson.M{"email": email}).One(&result)
+	err := collection.Find(bson.M{"email": email}).One(&result)
 	if err != nil {
 		log.Fatal("couldn't find user in mongo! ", err)
 	}
