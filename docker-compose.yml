@@ -5,6 +5,6 @@ go-rest:
   links:
    - mongodb
 mongodb:
-  image: juanjoqmelian/mongo
+  image: mongo
   ports:
      - "27017:27017"
