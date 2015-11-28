@@ -11,7 +11,17 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func NewUser(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+type UserWebService interface {
+	NewUser(writer http.ResponseWriter, request *http.Request, params httprouter.Params)
+	GetUser(writer http.ResponseWriter, request *http.Request, params httprouter.Params)
+	GetUsers(writer http.ResponseWriter, request *http.Request, params httprouter.Params)
+}
+
+type DefaultUserWebService struct {
+	UserWebService
+}
+
+func (DefaultUserWebService) NewUser(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 
 	requestBody, err := ioutil.ReadAll(request.Body)
 	if err != nil {
@@ -41,7 +51,7 @@ func NewUser(writer http.ResponseWriter, request *http.Request, params httproute
 	writer.WriteHeader(204)
 }
 
-func GetUsers(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+func (DefaultUserWebService) GetUsers(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 
 	session, err := mgo.Dial("mongodb://192.168.99.100:27017")
 	if err != nil {
@@ -67,7 +77,7 @@ func GetUsers(writer http.ResponseWriter, request *http.Request, params httprout
 	writer.WriteHeader(200)
 }
 
-func GetUser(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+func (DefaultUserWebService) GetUser(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
 
 	email := params.ByName("email")
 
