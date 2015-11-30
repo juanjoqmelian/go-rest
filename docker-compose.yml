@@ -1,7 +1,25 @@
-go-rest:
+nginx:
+    build: ./nginx
+    ports:
+        - "80:80"
+#    links:
+#        - go-rest
+go-rest-1:
   build: .
   ports:
    - "8080:8080"
+  links:
+   - mongodb
+go-rest-2:
+  build: .
+  ports:
+   - "8081:8081"
+  links:
+   - mongodb
+go-rest-3:
+  build: .
+  ports:
+   - "8082:8082"
   links:
    - mongodb
 mongodb:
