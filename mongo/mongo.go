@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	MongoDbHost = "mongodb://192.168.99.100:27017"
+	MongoDbHost = "mongodb://local-mongo:27017"
 	MongoDbSchema = "go-test"
 	MongoDbUserTable = "user"
 )
