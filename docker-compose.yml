@@ -3,9 +3,9 @@ nginx:
     ports:
         - "80:80"
     links:
-        - go-rest-1
-        - go-rest-2
-        - go-rest-3
+        - go-rest-1:service1
+        - go-rest-2:service2
+        - go-rest-3:service3
 go-rest-1:
   build: .
   ports:
