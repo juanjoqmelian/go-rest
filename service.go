@@ -7,10 +7,6 @@ import (
 	"github.com/juanjoqmelian/go-rest/users/mongo"
 )
 
-const (
-	MongoDbHost = "mongodb://192.168.99.100:27017"
-)
-
 func main() {
 
 	mongo.GetConnection()
@@ -24,5 +20,5 @@ func main() {
 	router.POST("/users", defaultUserWebService.NewUser)
 	router.PUT("/users/:email", defaultUserWebService.NewUser)
 
-	http.ListenAndServe(":8080", router)
+	http.ListenAndServe(":80", router)
 }
